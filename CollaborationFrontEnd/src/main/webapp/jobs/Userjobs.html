@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Userjobs</title>
+
+
+</head>
+<body>
+
+<div class="column-content-region " style="align:center;" ng-controller="JobController as job">
+<h3 style="text-align:center"><b>JOBS</b></h3>
+<div class="abc col-sm-5 col-sm-offset-1" ng-repeat="u in job.jobs" >
+<h1>Job:<span ng-bind="u.jobName"></span></h1>
+<h2>Company Name:<span ng-bind="u.companyName"></span></h2>
+<h3>Description:<span ng-bind="u.technologiesExpected"></span></h3>
+<h3>JobLocation:<span ng-bind="u.address"></span></h3>
+<hr>
+</div>
+
+</div>
+</body>
+
+</html>

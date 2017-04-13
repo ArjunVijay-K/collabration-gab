@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>GAB</title>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="description" content="Simple ideas for enhancing text input interactions" />
+		<meta name="keywords" content="input, text, effect, focus, transition, interaction, inspiration, web design" />
+		<meta name="author" content="Codrops" />
+  
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ 
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+  
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script> 
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-cookies.js"></script>
+<!-- 
+<script>
+var app = angular.module('myApp,[]);
+app.controller('myCtrl', fuction($scope){
+	$scope.IsAdmin = function(){
+		return $scope.role=="Admin";
+	}
+})
+</script>
+ -->
+
+  		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.2.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/set2.css" />
+  	  <script type="text/javascript" src="app.js"></script>
+  	  <script type="text/javascript" src="user/UserController.js"></script>
+  	  <script type="text/javascript" src="user/UserService.js"></script>
+  	   <script type="text/javascript" src="user/AuthenticationService.js"></script>
+  	   <script type="text/javascript" src="user/LoginController.js"></script>
+  	   <script type="text/javascript" src="user/FlashService.js"></script>
+  	   
+  	  <script type="text/javascript" src="c_blog/BlogController.js"></script>
+  	  <script type="text/javascript" 	src="c_blog/BlogService.js"></script>
+  	  <script type="text/javascript" src="forum/ForumController.js"></script>
+  	  <script type="text/javascript" src="forum/ForumService.js"></script>
+  	  <script type="text/javascript" src="jobs/JobController.js"></script>
+  	  <script type="text/javascript" src="jobs/JobService.js"></script>
+  	  
+<style>
+
+
+body{
+   /*  background:url('http://www.hdwallpapers.in/walls/blurred_colors-wide.jpg'); */
+      background:
+		url('https://images.freecreatives.com/wp-content/uploads/2016/05/PGradient-Background-For-Desktop.jpg'); 
+     padding:20px;
+    
+    
+}
+#login-dp{
+    min-width: 250px;
+    padding: 14px 14px 0;
+    overflow:hidden;
+    background-color:rgba(255,255,255,.8);
+}
+#login-dp .help-block{
+    font-size:12px    
+}
+#login-dp .bottom{
+    background-color:rgba(255,255,255,.8);
+    border-top:1px solid #ddd;
+    clear:both;
+    padding:14px;
+}
+#login-dp .social-buttons{
+    margin:12px 0    
+}
+#login-dp .social-buttons a{
+    width: 49%;
+}
+#login-dp .form-group {
+    margin-bottom: 10px;
+}
+.btn-fb{
+    color: #fff;
+    background-color:#3b5998;
+}
+.btn-fb:hover{
+    color: #fff;
+    background-color:#496ebc 
+}
+.btn-tw{
+    color: #fff;
+    background-color:#55acee;
+}
+.btn-tw:hover{
+    color: #fff;
+    background-color:#59b5fa;
+}
+@media(max-width:768px){
+    #login-dp{
+        background-color: inherit;
+        color: #fff;
+    }
+    #login-dp .bottom{
+        background-color: inherit;
+        border-top:0 none;
+    }
+}
+</style>
+<script>
+
+function checkPass(){
+		var password = document.getElementById('passWord');
+		var confirmpassword = document.getElementById('confirmPass');
+		
+		var message = document.getElementById('confirmMessage');
+		
+		 var goodColor = "lightgreen";
+		    var badColor = "#ff6666";
+		    
+		    if(password.value == confirmpassword.value){
+		        //The passwords match. 
+		        //Set the color to the good color and inform
+		        //the user that they have entered the correct password 
+		       // confirmpassword.style.backgroundColor = goodColor;
+		        message.style.color = goodColor;
+		        message.innerHTML = "<span class='glyphicon glyphicon-ok'></span>"
+		    }else{
+		        //The passwords do not match.
+		        //Set the color to the bad color and
+		        //notify the user.
+		       // confirmpassword.style.backgroundColor = badColor;
+		        message.style.color = badColor;
+		        message.innerHTML = "<span class='glyphicon glyphicon-remove'></span>"
+		    }
+		    
+		    
+	}
+
+
+</script>
+</head>
+<body ng-app="myApp"> 
+
+<div ng-controller="UserController as ctrl">
+
+<nav class="navbar navbar-default navbar-inverse" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header" margin-top=15px>
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <div class="header-logo" >
+				<img style="margin-top:0px;  "src="image/gabb.png" width="170" height="60" alt="SlangChat" class="header-logo-1x">
+				
+		</div> 
+      <!-- <a class="navbar-brand" href="#home" style="font-family: Comic Sans MS, Comic Sans, cursive; color: #27A4F7; font-size: 25px;">GAB</a> -->
+    </div>
+
+
+  
+
+		  
+
+		<div class="collapse navbar-collapse navbar-right">
+     <ul class="nav navbar-nav navbar-left">
+
+      <li class="link menubar"><a href="#home">HOME</a></li>
+       <li class="link menubar"><a href="#About">ABOUT</a></li>
+    
+        <li  class="link menubar"><a href="#forum">FORUM</a></li>
+       <li ng-hide="IsAdmin()" ng-controller="LoginController" class="link menubar"><a href="#blog">BLOG</a></li>
+        <li class="link menubar"><a href="#Userjobs">JOBS</a></li>
+        <li class="link menubar"><a href="#chat">CHAT</a></li>
+       
+       <li ng-hide="userName" class="link menubar"><a href="#login"> <span class="glyphicon glyphicon-log-in"></span> <b>SignIn</b></a></li>
+        <li  ng-hide="userName" class="link menubar"><a href="#register"> <span class="glyphicon glyphicon-user"></span> <b>SignUp</b></a></li>   
+        
+        <li ng-if="userName" class="link menubar" ><a  href="#logout"  ><span class="glyphicon glyphicon-log-out"></span><b> SignOut</b></a>
+      
+        </li>    
+     </ul>
+     
+     
+     
+    </div>
+
+	</div>
+
+</div>
+
+ <div class="container" ng-controller="UserController as ctrl" >
+    	<div ng-view></div>
+    </div>
+
+</body>
+</html>

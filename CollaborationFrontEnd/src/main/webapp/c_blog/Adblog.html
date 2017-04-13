@@ -1,0 +1,21 @@
+<a style="width: 20em; margin-left: 10em;" type="button" href="#Adblog"  class="btn btn-primary custom-width">Blog</a>
+<a style="width: 20em;" type="button" href="#jobs"  class="btn btn-success custom-width">Jobs</a>
+<a style="width: 20em;" type="button" href="#Adforum"  class="btn btn-warning custom-width">Forums</a>
+
+<div class="column-content-region col-sm-15" style="margin-left: 2em;" ng-controller="BlogController as blog">
+<h3 style="text-align:center">Blogs</h3>
+
+<div class="abc" ng-repeat="u in blog.blogs | filter: { status: 'P' }" >
+<h1><span ng-bind="u.blogName"></span></h1>
+<h6>Authored By:<span ng-bind="u.userName"></span></h6>
+<h6>Created On:<span ng-bind="u.date"></span></h6>
+<h3><span ng-bind="u.desc"></span></h3>
+<h3><span ng-bind="u.content"></span></h3>
+<!-- <a ><span class="glyphicon glyphicon-trash editContent"></span></a> -->
+<a style="width: 10em; margin-left: 10em;" type="button" ng-click="blog.updateBlog(u, u.blogId)"   class="btn btn-success custom-width">Accept</a>
+<a style="width: 10em; margin-left: 10em;" ng-click="blog.remove(u.blogId)" class="btn btn-danger custom-width">Reject</a>
+<!-- <a style="width: 10em; margin-left: 10em;" type="button" href="#"  class="btn btn-danger custom-width">Reject</a> -->
+<hr>
+</div>
+</div>
+	

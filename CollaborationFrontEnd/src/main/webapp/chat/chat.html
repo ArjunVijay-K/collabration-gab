@@ -1,0 +1,251 @@
+<style>
+
+
+html { width: 100%; height:100%; overflow:hidden; }
+
+body { 
+    width: 100%;
+	height:100%;
+	
+	font-family: 'Open Sans', sans-serif;
+	
+}
+.login { 
+	position: absolute;
+	top: 50%;
+	left: 10%;
+	margin: -150px 0 0 -150px;
+	width:300px;
+	height:300px;
+}
+ h2 { color: #fff; text-shadow: 0 0 10px rgba(0,0,0,0.3); letter-spacing:1px; text-align:center; }
+
+input { 
+
+	 width:60%;
+	margin-bottom: 15px; 
+	
+	background: rgba(0,0,0,0.3);
+	border: none;
+	outline: none;
+	padding: 10px;
+	font-size: 13px;
+	color: #fff;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+	border: 1px solid rgba(0,0,0,0.3);
+	border-radius: 4px;
+	box-shadow: inset 0 -5px 45px rgba(100,100,100,0.2), 0 1px 1px rgba(255,255,255,0.2);
+	-webkit-transition: box-shadow .5s ease;
+	-moz-transition: box-shadow .5s ease;
+	-o-transition: box-shadow .5s ease;
+	-ms-transition: box-shadow .5s ease;
+	transition: box-shadow .5s ease;
+	
+}
+input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgba(255,255,255,0.2); }
+
+</style>
+
+
+
+<script type="text/javascript" >
+var sessionId = '';
+//name of the client
+var name = '';
+//socket connection url and port
+var socket_url = '10.19.224.159';
+var port = '8030';
+$(document).ready(function() {
+ $("#form_submit, #form_send_message").submit(function(e) {
+     e.preventDefault();
+     join();
+ });
+});
+var webSocket;
+/**
+* Connecting to socket
+*/
+function join() {
+ // Checking person name
+ if ($('#input_name').val().trim().length <= 0) {
+     alert('Enter your name');
+ } else {
+     name = $('#input_name').val().trim();
+     $('#prompt_name_container').fadeOut(1000, function() {
+         // opening socket connection
+         openSocket();
+     });
+ }
+ return false;
+}
+/**
+* Will open the socket connection
+*/
+function openSocket() {
+ // Ensures only one connection is open at a time
+ if (webSocket !== undefined && webSocket.readyState !== WebSocket.CLOSED) {
+     return;
+ }
+ // Create a new instance of the websocket
+ webSocket = new WebSocket("ws://" + socket_url + ":" + port
+         + "/CollaborationFrontEnd/chat?name=" + name);
+ /**
+  * Binds functions to the listeners for the websocket.
+  */
+ webSocket.onopen = function(event) {
+     $('#message_container').fadeIn();
+     if (event.data === undefined)
+         return;
+ };
+ webSocket.onmessage = function(event) {
+     // parsing the json data
+     parseMessage(event.data);
+ };
+ webSocket.onclose = function(event) {
+     alert('Error! Connection is closed. Try connecting again.');
+ };
+}
+/**
+* Sending the chat message to server
+*/
+function send() {
+ var message = $('#input_message').val();
+ if (message.trim().length > 0) {
+     sendMessageToServer('message', message);
+ } else {
+     alert('Please enter message to send!');
+ }
+}
+/**
+* Closing the socket connection
+*/
+function closeSocket() {
+ webSocket.close();
+ $('#message_container').fadeOut(600, function() {
+     $('#prompt_name_container').fadeIn();
+     // clearing the name and session id
+     sessionId = '';
+     name = '';
+     // clear the ul li messages
+     $('#messages').html('');
+     $('p.online_count').hide();
+ });
+}
+/**
+* Parsing the json message. The type of message is identified by 'flag' node
+* value flag can be self, new, message, exit
+*/
+function parseMessage(message) {
+ var jObj = $.parseJSON(message);
+ // if the flag is 'self' message contains the session id
+ if (jObj.flag == 'self') {
+     sessionId = jObj.sessionId;
+ } else if (jObj.flag == 'new') {
+     // if the flag is 'new', a client joined the chat room
+     var new_name = 'You';
+     // number of people online
+     var online_count = jObj.onlineCount;
+     $('p.online_count').html(
+             'Hello, <span class="green">' + name + '</span>. <b>'
+                     + online_count + '</b> people online right now')
+             .fadeIn();
+     if (jObj.sessionId != sessionId) {
+         new_name = jObj.name;
+     }
+     var li = '<li class="new"><span class="name">' + new_name + '</span> '
+             + jObj.message + '</li>';
+     $('#messages').append(li);
+     $('#input_message').val('');
+ } else if (jObj.flag == 'message') {
+     // if the json flag is 'message', it means somebody sent the chat
+     // message
+     var from_name = 'You';
+     if (jObj.sessionId != sessionId) {
+         from_name = jObj.name;
+     }
+     var li = '<li><span class="name">' + from_name + '</span> '
+             + jObj.message + '</li>';
+     // appending the chat message to list
+     appendChatMessage(li);
+     $('#input_message').val('');
+ } else if (jObj.flag == 'exit') {
+     // if the json flag is 'exit', it means somebody left the chat room
+     var li = '<li class="exit"><span class="name red">' + jObj.name
+             + '</span> ' + jObj.message + '</li>';
+     var online_count = jObj.onlineCount;
+     $('p.online_count').html(
+             'Hello, <span class="green">' + name + '</span>. <b>'
+                     + online_count + '</b> people online right now');
+     appendChatMessage(li);
+ }
+}
+/**
+* Appending the chat message to list
+*/
+function appendChatMessage(li) {
+ $('#messages').append(li);
+ // scrolling the list to bottom so that new message will be visible
+ $('#messages').scrollTop($('#messages').height());
+}
+/**
+* Sending message to socket server message will be in json format
+*/
+function sendMessageToServer(flag, message) {
+ var json = '{""}';
+ // preparing json object
+ var myObject = new Object();
+ myObject.sessionId = sessionId;
+ myObject.message = message;
+ myObject.flag = flag;
+ // converting json object to json string
+ json = JSON.stringify(myObject);
+ // sending message to server
+ webSocket.send(json);
+}
+</script>
+
+
+<body>
+    <div class="body_container">
+    
+ 
+        <div id="header">
+            <h1>Group Chat</h1>
+            <p class='online_count'>
+                <b>3</b> people online right now
+            </p>
+        </div>
+ 
+        <div id="prompt_name_container" class="box_shadow">
+            <p><b>Enter your name</b></p>
+            <form id="form_submit" method="post">
+                <input type="text" id="input_name" placeholder="Enter Your Name Here..." />
+                 <a  class="btn btn-warning" type="submit"  id="btn_join" ><span class="glyphicon glyphicon-plus"></span> JOIN</a>
+            </form>
+        </div>
+ 
+        <div id="message_container" class="box_shadow">
+ 
+            <ul id="messages">
+            </ul>
+ 
+              <p><b>Type Your Message</b></p>
+            <div id="input_message_container">
+                <form id="form_send_message" method="post" action="#">
+                    <input type="text" id="input_message"
+                        placeholder="Type Your Message Here..." />
+                        
+                       <a class="btn btn-success"   type="submit" id="btn_send" onclick="send();"> <span class="glyphicon glyphicon-send"></span> Send </a>
+                    <div class="clear"></div>
+                </form>
+            </div>
+            <div>
+ 
+                <input class="btn btn-danger "  type="button" onclick="closeSocket();"
+                    value="Leave Chat Room" id="btn_close" />
+            </div>
+ 
+        </div>
+ 
+    </div>
+ 

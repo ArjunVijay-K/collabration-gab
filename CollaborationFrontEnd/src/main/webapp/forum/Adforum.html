@@ -1,0 +1,13 @@
+<a style="width: 20em; margin-left: 10em;" type="button" href="#Adblog"  class="btn btn-primary custom-width">Blog</a>
+<a style="width: 20em;" type="button" href="#jobs"  class="btn btn-success custom-width">Jobs</a>
+<a style="width: 20em;" type="button" href="#Adforum"  class="btn btn-warning custom-width">Forums</a>
+
+<div class="column-content-region col-sm-15"  ng-controller="ForumController as forum">
+<h3 style="text-align:center"  >Forums</h3>
+<div class="abc" ng-repeat="u in forum.forums">
+<h1><span ng-bind="u.forumTitle"></span></h1><h6>Created On:<span ng-bind="u.date"></span></h6>
+<h6>Created By:<span ng-bind="u.userName"></span></h6>
+<h5><span ng-bind="u.forumContent "></span></h5>
+<hr>
+</div>
+</div>
